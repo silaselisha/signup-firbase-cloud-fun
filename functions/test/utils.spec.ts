@@ -23,13 +23,13 @@ describe('Util', () => {
 
     expect(diff).toEqual({
       new: 1,
-      changed: [5, 6],
+      changed: [6],
       deleted: DEL,
     });
   });
 
   it('object change diff shallow', () => {
-    const DEL = '<DEL>';
+    const DEL = 'Deleted';
 
     const obj = {
       new: 1,
@@ -46,12 +46,12 @@ describe('Util', () => {
     };
 
     const diff = objectChangeDiff(obj, objToCheck, DEL, false);
-
+    console.log(diff)
     expect(diff).toEqual({
       new: 1,
-      sameDeep: [3, 4],
-      changed: [5, 6],
-      deleted: DEL,
+      sameDeep: [4],
+      changed: [6],
+      deleted: 'Deleted',
     });
   });
 
@@ -90,7 +90,7 @@ describe('Util', () => {
     };
     const diff = objectChangeDiff(obj, objToCheck, DEL)
 
-    expect(diff).toEqual(expect.objectContaining({ changed: { plug: 'task', take: 'jest' }, deleted: 'Deleted', new: 1 }))
+    expect(diff).toEqual(expect.objectContaining({ changed: {take: 'jest' }, deleted: 'Deleted', new: 1 }))
   });
   it('Test for strings', () => {
     const DEL = 'Deleted';
@@ -128,9 +128,14 @@ describe('Util', () => {
       changed: [{plug: 'task', take: 'mocha'}, 100],
       deleted: 8,
     };
-    const diff = objectChangeDiff(obj, objToCheck, DEL)
 
-    expect(diff).toEqual(expect.objectContaining({ changed: [ { task: 'jest test' }, 89, 100 ], deleted: 'Deleted', new: 1 }))
+    const diff = objectChangeDiff(obj, objToCheck, DEL)
+    console.log(diff)
+    expect(diff).toEqual(expect.objectContaining({
+      changed: [ { task: 'jest test' }, 89, 100 ],
+      deleted: 'Deleted',
+      new: 1
+    }))
   });
   it('Test for records', () => {
     interface CatInfo {
@@ -154,10 +159,6 @@ describe('Util', () => {
 
     const diff = objectChangeDiff(cats, dog)
 
-    expect(diff).toEqual(expect.objectContaining({
-      miffy: { age: 10, breed: 'Persian' },
-      boris: { age: 5, breed: 'Maine Coon' },
-      mordred: { age: 16, breed: 'British Shorthair' }
-    }))
+    expect(diff).toEqual(expect.objectContaining({ miffy: { age: 10 }, boris: { age: 5 }, mordred: { age: 16 } }))
   });
 });

@@ -11,18 +11,30 @@ export function objectChangeDiff(obj: object, objToCheck: object, placeHolderFor
   const merged = { ...objToCheck, ...obj };
   const result: Record<string, any> = {};
 
-  for (const [key, value] of Object.entries(merged)) {
-    if (key in obj) {
+  for(const [key, value] of Object.entries(merged)) {
+    if(key in obj) {
       const valueToCheck = (objToCheck as any)[key];
       let isEqual = valueToCheck === value;
-      if (deepEqual && !isEqual) {
+      if(deepEqual && !isEqual) {
         isEqual = _.isEqual(valueToCheck, value);
       }
 
-      if (!isEqual) {
+      if(!isEqual) {
+          if(typeof value === 'object') {
+            for(let key in value) {
+              if((value as any)[key] === (valueToCheck as any)[key]) {
+                if(Array.isArray(value)) {
+                  let index = value.indexOf((value as any)[key])
+                  value.splice(index, 1)
+                }else {
+                  delete (value as any)[key]
+                }
+              }
+            }
+          }
         result[key] = value;
       }
-    } else {
+    }else {
       result[key] = placeHolderForDeletedProperties;
     }
   }

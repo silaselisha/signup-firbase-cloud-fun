@@ -46,7 +46,7 @@ describe('Util', () => {
     };
 
     const diff = objectChangeDiff(obj, objToCheck, DEL, false);
-    console.log(diff)
+   
     expect(diff).toEqual({
       new: 1,
       sameDeep: [4],
@@ -130,7 +130,7 @@ describe('Util', () => {
     };
 
     const diff = objectChangeDiff(obj, objToCheck, DEL)
-    console.log(diff)
+   
     expect(diff).toEqual(expect.objectContaining({
       changed: [ { task: 'jest test' }, 89, 100 ],
       deleted: 'Deleted',

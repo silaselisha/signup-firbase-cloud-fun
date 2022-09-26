@@ -2,6 +2,7 @@ import { describe, expect, test, beforeAll } from '@jest/globals'
 import * as functionsTest from 'firebase-functions-test'
 import * as admin from 'firebase-admin'
 import * as myFunctions from '../src'
+import {v4 as uuid} from 'uuid'
 
 
 const testEnv = functionsTest({
@@ -16,7 +17,7 @@ describe('On creating a new user', () => {
         wrapped = testEnv.wrap(myFunctions.addUser)
     })
     test('Give me a new user', async () => {
-        let path = 'temporaryUsers/1234567'
+        let path = `temporaryUsers/${uuid()}`
 
         const snap = await testEnv.firestore.makeDocumentSnapshot({
             firstName: 'Jack',

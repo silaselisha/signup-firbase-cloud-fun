@@ -15,3 +15,19 @@ export const createUserAcount = functions.https.onRequest(async (req, res) => {
     status: "success",
   });
 });
+
+export const addUser = functions.firestore.document("/temporaryUsers/{id}").onCreate((snap, context) => {
+  try {
+    console.log(context.params);
+    return snap.ref.set({
+      firstName: "Jack",
+      lastName: "Potter",
+      email: "jack@test.com",
+      bio: "UI/UX designer",
+      password: "pass12345"
+    }, {merge: true});
+  } catch (error) {
+    console.log("Something went wrong");
+    return Promise.reject(error);
+  }
+});
